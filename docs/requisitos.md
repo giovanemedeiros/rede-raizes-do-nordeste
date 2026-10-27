@@ -36,3 +36,70 @@ A expansão no modelo de franquias traz particularidades que devem ser tratadas 
 2. Sazonalidade e Variações Regionais: Certos produtos só estão ativos em períodos específicos do ano (como o ciclo junino) ou sofrem pequenas adaptações de receita por região. O catálogo do sistema deve ser dinâmico e flexível, permitindo ativação e inativação programada por unidade e por data.
 3. Gestão e Consistência de Estoque Local: O estoque é descentralizado por loja. As baixas de insumos e itens acabados devem ocorrer no momento da confirmação do pedido, evitando que um mesmo item seja vendido simultaneamente no aplicativo e no totem.
 4. Auditoria e Rastreabilidade da Matriz: Toda operação sensível (cancelamentos, estornos e alterações de preço) deve registrar obrigatoriamente data, hora, unidade, usuário responsável e justificativa, garantindo a governança da franqueadora sobre as franquias.
+
+## 5. Requisitos Funcionais do Sistema (RF)
+
+Os requisitos funcionais detalham as ações, regras de negócio e comportamentos operacionais exigidos para atender a operação omnichannel da rede:
+
+| Identificador | Requisito Funcional | Descrição | Canais Aplicáveis | Atores Envolvidos | Prioridade |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| RF-01 | Consulta de Cardápio por Unidade | O sistema deve listar os produtos comercializados filtrando pela unidade escolhida, ocultando automaticamente itens não produzidos em lojas de formato reduzido e respeitando a sazonalidade vigente. | App, Totem, Balcão | Cliente, Atendente | Alta |
+| RF-02 | Customização de Itens Regionais | Permitir ao cliente selecionar opções de recheio, adicionais e observações de preparo para produtos típicos (cuscuz, tapiocas, bebidas regionais). | App, Totem, Balcão | Cliente, Atendente | Alta |
+| RF-03 | Reserva Atômica de Estoque | Ao avançar para a tela de pagamento, o sistema deve reservar temporariamente os itens no estoque local da unidade por até 10 minutos para prevenir vendas concorrentes duplicadas. | App, Totem, Balcão | Cliente, Atendente | Alta |
+| RF-04 | Processamento de Pagamento Desacoplado | O sistema deve solicitar a cobrança ao serviço externo especializado (Pix, cartão de crédito/débito) e registrar a transação apenas como aprovada ou recusada, sem armazenar dados sensíveis de cartão. | App, Totem, Balcão | Cliente, Atendente, Gateway | Alta |
+| RF-05 | Envio de Pedido à Cozinha (KDS) | Após a confirmação do pagamento (ou registro manual no balcão em dinheiro), o pedido deve ser despachado automaticamente para a fila visual da cozinha na unidade correspondente. | Todos | Equipe de Cozinha | Alta |
+| RF-06 | Gestão e Notificação de Status | O sistema deve atualizar e disponibilizar o status do pedido (Pendente, Em Preparo, Pronto para Retirada, Entregue) no painel de senhas, aplicativo e balcão de pick-up. | App, Totem, Balcão | Cliente, Cozinha, Atendente | Alta |
+| RF-07 | Programa de Fidelidade e LGPD | O sistema deve permitir o acúmulo e resgate de pontos mediante identificação voluntária (CPF) e consentimento prévio e explícito para tratamento de dados promocionais. | App, Totem, Balcão | Cliente, Gerente | Média |
+| RF-08 | Auditoria de Operações Sensíveis | Exigir autenticação com credencial de perfil gerencial para autorizar cancelamentos com devolução de valor, descontos manuais e exclusão de itens em preparo. | Balcão, Painel Matriz | Gerente, Gestor Matriz | Alta |
+
+## 6. Requisitos Não Funcionais do Sistema (RNF)
+
+Os requisitos não funcionais especificam critérios de qualidade e restrições técnicas baseados na norma ISO/IEC 25010, essenciais para a confiabilidade em horários de pico:
+
+| Identificador | Categoria (ISO 25010) | Descrição do Requisito Não Funcional | Métrica e Critério de Aceitação | Prioridade |
+| :--- | :--- | :--- | :--- | :--- |
+| RNF-01 | Desempenho / Eficiência | O tempo de carregamento do cardápio e a resposta das requisições de consulta devem ser rápidos para evitar filas. | Tempo de resposta inferior a 2,0 segundos para 95% das requisições sob carga nominal. | Alta |
+| RNF-02 | Confiabilidade / Disponibilidade | O sistema deve manter alta disponibilidade operacional, especialmente durante os picos de almoço e jantar. | Disponibilidade mínima mensal de 99,5%, com tolerância máxima a paradas não programadas de 3,6 horas/mês. | Alta |
+| RNF-03 | Tolerância a Falhas | O sistema deve isolar falhas do gateway de pagamento, aplicando retentativas automáticas e devolvendo respostas amigáveis sem travamento da interface. | Timeout máximo configurado em 15 segundos para serviços externos com mecanismo de fallback estruturado. | Alta |
+| RNF-04 | Usabilidade / Responsividade | A interface do aplicativo e dos totens deve ser intuitiva, adaptando-se ergonomicamente a diferentes tamanhos de tela mobile e terminais touch. | Conclusão da jornada completa de compra em no máximo 4 etapas e taxa de sucesso de navegação superior a 90% em testes com usuários. | Alta |
+| RNF-05 | Segurança / LGPD | Todos os dados pessoais cadastrais devem trafegar sob criptografia em trânsito (HTTPS/TLS 1.3), com anonimização em relatórios analíticos da franqueadora. | Criptografia ponta a ponta obrigatória e zero armazenamento de dados sensíveis de pagamento (PCI-DSS alinhado). | Alta |
+| RNF-06 | Manutenibilidade e Testabilidade | A arquitetura deve desacoplar regras de negócio das integrações de hardware e gateway externo para viabilizar testes automatizados isolados. | Cobertura mínima de 80% nos testes automatizados das regras centrais de pedido e concorrência de estoque. | Alta |
+
+## 7. Detalhamento da Feature Crítica: Fluxo de Realização e Pagamento de Pedidos Multicanal
+
+Conforme exigido pelo Roteiro da disciplina, foi selecionada a funcionalidade central do negócio para o detalhamento de 8 requisitos de qualidade mensuráveis e objetivos:
+
+1. Desempenho da API de Catálogo: A busca e renderização dos itens do cardápio filtrados por unidade não deve ultrapassar 1,5 segundos em conexões 4G estáveis ou na rede local da loja.
+2. Tempo de Conclusão da Compra: O fluxo de adicionar produtos, selecionar adicionais e chegar à confirmação do pedido não deve exigir mais do que 4 telas ou cliques principais no Totem e no App.
+3. Alta Disponibilidade do Checkout: O serviço de finalização de pedidos deve apresentar índice de disponibilidade igual ou superior a 99,8% nos intervalos de pico operacional (das 11h às 14h e das 18h às 21h).
+4. Confiabilidade na Validação de Saldo de Estoque: Em condições de concorrência com 100 requisições simultâneas para o mesmo item na mesma unidade física, o sistema deve garantir que zero pedidos sejam confirmados acima do estoque real.
+5. Tolerância a Falhas no Gateway de Pagamento: Em caso de indisponibilidade ou lentidão do serviço externo de pagamento, o sistema deve abortar a tentativa em no máximo 10 segundos, liberar a reserva de estoque e emitir notificação clara ao cliente sem encerrar a sessão.
+6. Usabilidade e Prevenção de Erros na Seleção: A interface deve exigir confirmação visual explícita da unidade física escolhida para retirada antes de liberar o botão de pagamento, mitigando em 95% o erro de retirada na unidade incorreta.
+7. Segurança no Tráfego de Cobrança: Nenhuma informação de cartão de crédito (número completo, CVV) deve passar ou residir nos servidores centrais da franquia; as transações devem utilizar exclusivamente tokens criptografados fornecidos pelo gateway externo.
+8. Observabilidade e Rastreabilidade Transacional: Cada tentativa de pedido deve gerar um identificador global único (UUID), registrando logs estruturados com tempo de resposta, canal de origem, unidade e status financeiro com latência de log inferior a 500 milissegundos.
+
+## 8. Matriz Preliminar de Rastreabilidade (Requisitos -> Testes -> Evidências)
+
+A tabela abaixo estabelece o vínculo bidirecional entre os requisitos levantados, os procedimentos de teste planejados e os artefatos de evidência que serão produzidos:
+
+| ID Requisito | Requisito Associado | Tipo / Nível de Teste | Caso de Teste Planejado | Evidência de Validação Esperada |
+| :--- | :--- | :--- | :--- | :--- |
+| TR-01 | RF-01 (Filtro por Unidade) | Teste de Sistema (E2E) | Validar que itens de cozinha completa não aparecem no cardápio de unidades compactas. | Screenshot da tela do cardápio e resposta JSON do endpoint de catálogo. |
+| TR-02 | RF-03 (Reserva de Estoque) | Teste de Integração / Concorrência | Simular requisições paralelas de compra para o último item disponível. | Log de execução demonstrando bloqueio atômico e rejeição da segunda transação. |
+| TR-03 | RF-04 (Pagamento Desacoplado) | Teste de Integração (Mock) | Validar resposta de sucesso e de recusa por saldo insuficiente com mock do gateway. | Relatório de execução de testes de API com códigos de status HTTP 200 e 402/400. |
+| TR-04 | RF-05 (Envio à Cozinha) | Teste de Integração | Confirmar se pedido pago no Totem surge imediatamente na fila KDS da cozinha. | Captura de tela do terminal de cozinha e registro de evento no banco de dados. |
+| TR-05 | RF-07 (LGPD e Fidelidade) | Teste de Sistema | Verificar obrigatoriedade do checkbox de consentimento antes de pontuar cliente no App. | Screenshot da tela de consentimento e teste automatizado validando persistência do opt-in. |
+| TR-06 | RF-08 (Auditoria Gerencial) | Teste de Segurança / RBAC | Tentar cancelar pedido com perfil de atendente comum e com perfil gerencial. | Registro de bloqueio de acesso (HTTP 403) para atendente e aprovação com log para gerente. |
+| TR-07 | RNF-01 (Desempenho < 2s) | Teste de Desempenho / Carga | Submeter o endpoint de catálogo a 200 usuários simultâneos simulando horário de almoço. | Relatório de tempos de resposta e gráfico de percentil gerado pela suíte de testes. |
+| TR-08 | RNF-03 (Tolerância a Timeout) | Teste de Resiliência | Simular atraso proposital de 15 segundos na resposta do gateway de pagamento. | Relatório de execução demonstrando disparo do timeout e mensagem amigável ao cliente. |
+
+## 9. Análise de Riscos Operacionais e Conformidade com a LGPD
+
+### 9.1. Riscos Operacionais em Horários de Pico
+- Risco de Sobrecarga e Concorrência: A ocorrência de acessos simultâneos no App e Totens pode causar lentidão na fila da cozinha e venda de produtos esgotados. Mitigação: Uso de cache local para leitura do catálogo e filas assíncronas com bloqueio transacional na confirmação do pedido.
+- Risco de Queda na Rede Externa: Se a conexão com a internet oscilar na loja física, os totens e o balcão podem ser impactados. Mitigação: Operação do balcão presencial com contingência local para emissão e impressão do pedido, sincronizando os dados com a matriz assim que o link for restabelecido.
+
+### 9.2. Diretrizes de Privacidade e Conformidade com a LGPD
+- Minimização de Dados: O sistema exige estritamente os dados necessários para o atendimento. Clientes no balcão e no totem podem concluir pedidos anonimamente, sem necessidade de informar CPF ou nome.
+- Consentimento Explícito: Para participação no programa de fidelidade e recebimento de promoções regionais, o cliente deve marcar ativamente a caixa de autorização (opt-in), acompanhada de link claro para a Política de Privacidade simplificada.
+- Ciclo de Vida e Anonimização: Os dados pessoais vinculados aos pedidos concluídos devem ser descaracterizados para fins estatísticos após o período fiscal obrigatório, impedindo a identificação do cliente em relatórios gerenciais da franqueadora.
