@@ -53,8 +53,6 @@ A arquitetura foi desenhada especificamente para favorecer a Garantia da Qualida
 - Ponto de Teste B (Aplicação / Integração): Testes de contrato e de integração validando a troca de mensagens com o mock do gateway de pagamento, tratamento de timeout e emissão de eventos para a cozinha.
 - Ponto de Teste C (API / E2E): Testes ponta a ponta simulando a jornada completa do cliente no totem ou aplicativo, assegurando tempos de resposta inferiores a 2 segundos e consistência visual em resoluções mobile.
 
----
-
 ## 2. Diagrama de Casos de Uso (UML)
 
 O diagrama a seguir sintetiza as principais interações entre os atores identificados e as funcionalidades do sistema:
@@ -93,8 +91,6 @@ flowchart LR
     Gerente --> UC06
     UC06 -.->|<<extend>>| UC01
 ```
-
----
 
 ## 3. Especificação Detalhada de Casos de Uso
 
@@ -163,8 +159,6 @@ Nenhuma.
 - **RN 1 (Filtragem por Formato de Cozinha):** Lojas com cozinha reduzida nunca devem exibir pratos quentes que exijam manipulação pesada (como cuscuz tradicional recheado feito na hora). Os itens são ocultados preventivamente.  
 - **RN 2 (Reserva Temporária - TTL):** A reserva temporária de estoque possui validade estrita de 10 minutos. Após este prazo sem confirmação de pagamento, a reserva é expirada automaticamente por rotina em segundo plano.  
 - **RN 3 (Idempotência Transacional):** Toda requisição de pagamento deve carregar um UUID único gerado pelo checkout para evitar débitos duplicados em retentativas acidentais.
-
----
 
 ### UC 02 - Aderir ao Programa de Fidelidade com Consentimento LGPD
 
