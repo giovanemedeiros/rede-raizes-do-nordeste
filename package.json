@@ -1,0 +1,29 @@
+{
+  "name": "rede-raizes-do-nordeste-qa",
+  "version": "1.0.0",
+  "description": "Suíte de testes automatizados e garantia da qualidade para a rede Raízes do Nordeste (UNINTER)",
+  "main": "src/mock-server.ts",
+  "scripts": {
+    "start:mock": "npx tsx src/mock-server.ts",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report"
+  },
+  "keywords": [
+    "qa",
+    "playwright",
+    "typescript",
+    "software-engineering",
+    "uninter"
+  ],
+  "author": "Giovane Medeiros",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
+
