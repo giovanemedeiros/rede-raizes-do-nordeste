@@ -2,13 +2,9 @@
 
 Em estrita conformidade com as diretrizes e orientações da disciplina de Projeto Multidisciplinar (Engenharia de Software) da UNINTER, este documento registra a utilização pontual de ferramentas de inteligência artificial generativa como suporte metodológico de apoio, revisão gramatical e consulta de normas técnicas, sem qualquer substituição do raciocínio analítico, das decisões arquiteturais e da autoria intelectual do estudante.
 
----
-
 ## 1. Ferramenta Utilizada
 - **Ferramenta:** Assistente de Inteligência Artificial (Google Gemini / Ambiente Antigravity).
 - **Finalidade:** Consulta de boas práticas de documentação em Engenharia de Software (norma ISO/IEC 25010), apoio na estruturação visual de tabelas comparativas em Markdown, revisão ortográfica em língua portuguesa e formatação textual acadêmica.
-
----
 
 ## 2. Prompts Utilizados pelo Estudante
 
@@ -20,8 +16,6 @@ Em estrita conformidade com as diretrizes e orientações da disciplina de Proje
 
 ### Prompt 3: Formatação de Documentação Técnica e Diagramação
 "Sugira boas práticas de formatação visual em Markdown para documentação de projetos de software (como tabelas de requisitos, rastreabilidade e planejamento de testes), visando facilitar a posterior conversão para documentos acadêmicos e relatórios técnicos formais."
-
----
 
 ## 3. Trechos, Estruturas e Formatos Aproveitados
 - Esquema de organização de colunas e categorização para tabelas de requisitos funcionais, requisitos não funcionais e métricas de qualidade (KPIs).

@@ -6,8 +6,6 @@ A mensuração objetiva da qualidade é um elemento mandatório no ciclo de vida
 
 Este documento formaliza a planilha de indicadores quantitativos obrigatórios, seus critérios de coleta, as metas estabelecidas e as ações de melhoria contínua, complementada pela política de privacidade e segurança da informação aplicada aos canais de atendimento (Aplicativo Mobile, Totens de Autoatendimento e Balcão).
 
----
-
 ## 2. Planilha de Métricas e Indicadores de Qualidade (KPIs)
 
 A tabela a seguir consolida as métricas mínimas obrigatórias exigidas pelas diretrizes acadêmicas e de mercado, correlacionando metas estipuladas, valores apurados na suíte de validação e o plano de ação preventiva:
@@ -21,8 +19,6 @@ A tabela a seguir consolida as métricas mínimas obrigatórias exigidas pelas d
 | **Tempo Médio de Correção (MTTR)** | Intervalo médio decorrido entre a identificação de um defeito crítico em produção e a disponibilização do patch corretivo. | < 24 horas | 4,5 horas (simulado) | Aprovado | Mapeamento do tempo de ciclo de commits corretivos e pipeline automatizada de deploy. | Pipeline de CI/CD automatizada com rollback imediato em caso de falha nos testes de fumaça (smoke tests). |
 | **Índice de Satisfação do Usuário (CSAT)** | Avaliação qualitativa da fluidez de navegação, clareza visual e facilidade de fechamento do pedido nos totens e app. | > 85% de aprovação | 91,2% (UAT simulado) | Aprovado | Pesquisa pós-compra integrada ao final da jornada de emissão da senha e testes de usabilidade. | Manter o fluxo simplificado em até 3 toques principais no Totem, mitigando sobrecarga cognitiva em horários de pico. |
 
----
-
 ## 3. Análise Crítica dos Resultados e Governança
 
 ### 3.1. Eficiência nos Horários de Pico
@@ -30,8 +26,6 @@ Os tempos de resposta medidos na suíte automatizada demonstraram que o processa
 
 ### 3.2. Tolerância a Falhas e Resiliência Financeira
 O monitoramento do tempo limite de comunicação com o serviço bancário comprovou que o mecanismo de *fail-fast* (timeout estrito de 10 segundos) protege o terminal de autoatendimento contra congelamentos. Em caso de indisponibilidade bancária ou rejeição de transação (código HTTP 402/504), a liberação imediata da reserva temporária de estoque restaura o inventário em tempo real, evitando perdas de vendas nos demais canais.
-
----
 
 ## 4. Política de Privacidade, Segurança da Informação e Conformidade com a LGPD
 
