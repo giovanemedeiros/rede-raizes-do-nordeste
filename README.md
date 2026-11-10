@@ -2,15 +2,11 @@
 
 Projeto multidisciplinar desenvolvido para a disciplina de Engenharia de Software (UNINTER), focado no planejamento, modelagem arquitetural e automação de testes para a rede de franquias de alimentação "Raízes do Nordeste".
 
----
-
 ## 1. Visão Geral do Projeto
 
 A rede Raízes do Nordeste opera com atendimento multicanal (Aplicativo Mobile, Totens de Autoatendimento, Balcão Presencial e Retirada Pick-up), demandando alta confiabilidade operacional, consistência de estoque em tempo real, tolerância a falhas em pagamentos externos e estrita conformidade com a Lei Geral de Proteção de Dados (LGPD).
 
 Este repositório reúne tanto a documentação técnica formal de requisitos e arquitetura quanto a suíte executável de testes automatizados construída em TypeScript com Playwright.
-
----
 
 ## 2. Estrutura do Repositório
 
@@ -40,16 +36,12 @@ Projeto/
 └── package.json                           # Dependências e scripts de execução
 ```
 
----
-
 ## 3. Tecnologias Utilizadas
 
 - Linguagem: TypeScript (Node.js v24+)
 - Framework de Testes: Playwright Test (@playwright/test)
 - Executor de Mocks: TSX (TypeScript Execute)
 - Protocolo: HTTP REST e HTML5 responsivo
-
----
 
 ## 4. Instruções de Instalação e Execução
 
@@ -79,8 +71,6 @@ Após a execução dos testes, abra o relatório visual interativo:
 ```powershell
 npm run test:report
 ```
-
----
 
 ## 5. Relação entre Cenários do QA Plan e Testes Automatizados
 
