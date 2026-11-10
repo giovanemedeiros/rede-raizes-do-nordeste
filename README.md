@@ -1,23 +1,28 @@
 # Rede Raízes do Nordeste - Engenharia de Software e Qualidade (QA)
 
-Projeto multidisciplinar desenvolvido para a disciplina de Engenharia de Software (UNINTER), focado no planejamento, modelagem arquitetural e automação de testes para a rede de franquias de alimentação "Raízes do Nordeste".
+Projeto multidisciplinar desenvolvido para a disciplina de Projeto de Engenharia de Software (UNINTER), focado no planejamento, modelagem arquitetural e automação de testes para a rede de franquias de alimentação "Raízes do Nordeste".
 
 ## 1. Visão Geral do Projeto
 
 A rede Raízes do Nordeste opera com atendimento multicanal (Aplicativo Mobile, Totens de Autoatendimento, Balcão Presencial e Retirada Pick-up), demandando alta confiabilidade operacional, consistência de estoque em tempo real, tolerância a falhas em pagamentos externos e estrita conformidade com a Lei Geral de Proteção de Dados (LGPD).
 
-Este repositório reúne tanto a documentação técnica formal de requisitos e arquitetura quanto a suíte executável de testes automatizados construída em TypeScript com Playwright.
+Este repositório reúne tanto a documentação técnica formal de engenharia de software e qualidade quanto a suíte executável de testes automatizados construída em TypeScript com Playwright.
 
 ## 2. Estrutura do Repositório
 
 ```
-Projeto/
 ├── docs/                                  # Documentação formal de engenharia e QA
-│   ├── requisitos.md                      # Requisitos funcionais, não funcionais e matriz
-│   ├── arquitetura-e-casos-de-uso.md      # Arquitetura em camadas e especificação de casos de uso
-│   ├── plano-de-qualidade-e-testes.md     # Plano de QA, estratégia e os 10 cenários de teste
+│   ├── requisitos.md                      # Requisitos funcionais, não funcionais e matriz de rastreabilidade
+│   ├── arquitetura-e-casos-de-uso.md      # Arquitetura em camadas e especificação de casos de uso (UC-01 e UC-02)
+│   ├── plano-de-qualidade-e-testes.md     # Plano de QA, governança e especificação dos 10 cenários de teste
+│   ├── metricas-e-governanca-lgpd.md      # Planilha de métricas (KPIs/SLOs) e política de privacidade LGPD
 │   ├── declaracao-uso-ia.md               # Declaração metodológica conforme diretrizes da UNINTER
-│   └── evidencias/                        # Capturas de tela geradas pela suíte automatizada
+│   └── evidencias/                        # Diagrama UML e capturas visuais da suíte automatizada
+│       ├── diagrama-casos-de-uso.png      # Diagrama UML de Casos de Uso renderizado em alta resolução
+│       ├── evidencia-totem-sucesso.png    # Conclusão de pedido no Totem em 3 toques com senha (CT-01)
+│       ├── evidencia-lgpd-recusa.png      # Bloqueio de cadastro sem consentimento explícito (CT-08)
+│       ├── evidencia-lgpd-sucesso.png     # Cadastro aceito com opt-in voluntário dos termos (CT-08)
+│       └── evidencia-lgpd-anonimo.png     # Conclusão de pedido anônimo sem exigência de CPF (CT-08)
 ├── src/                                   # Camada de aplicação e simulação
 │   ├── data/
 │   │   └── cardapio.ts                    # Dados do cardápio regional e unidades da rede
@@ -42,6 +47,7 @@ Projeto/
 - Framework de Testes: Playwright Test (@playwright/test)
 - Executor de Mocks: TSX (TypeScript Execute)
 - Protocolo: HTTP REST e HTML5 responsivo
+- Padrões Arquiteturais: Clean Architecture, Desacoplamento via Interfaces, Princípio da Minimização de Dados (LGPD)
 
 ## 4. Instruções de Instalação e Execução
 
@@ -50,7 +56,7 @@ Projeto/
 - Git configurado.
 
 ### 4.2. Instalação das Dependências
-No terminal, dentro da pasta do projeto:
+No terminal, na raiz do repositório:
 ```powershell
 npm install
 ```
@@ -67,21 +73,22 @@ npm test
 ```
 
 ### 4.5. Visualização do Relatório Oficial em HTML
-Após a execução dos testes, abra o relatório visual interativo:
+Após a execução dos testes, abra o relatório visual interativo gerado pelo Playwright:
 ```powershell
 npm run test:report
 ```
 
 ## 5. Relação entre Cenários do QA Plan e Testes Automatizados
 
-| Cenário de Teste | Descrição da Validação | Arquivo de Teste Automatizado | Status |
-| :--- | :--- | :--- | :--- |
-| CT-01 | Pedido no Totem com pagamento Pix e emissão de senha | `tests/api/pagamento.spec.ts` e `tests/e2e/totem-checkout.spec.ts` | Aprovado |
-| CT-02 | Recusa de pagamento por saldo insuficiente (HTTP 402) | `tests/api/pagamento.spec.ts` | Aprovado |
-| CT-03 | Tolerância a timeout de 10s no gateway bancário (HTTP 504) | `tests/api/pagamento.spec.ts` | Aprovado |
-| CT-04 | Prevenção de concorrência atômica no último item de estoque | `tests/api/estoque.spec.ts` | Aprovado |
-| CT-05 | Ocultação preventiva de pratos pesados em cozinha reduzida | `tests/api/catalogo.spec.ts` | Aprovado |
-| CT-06 | Liberação automática de estoque por expiração de reserva (TTL) | `tests/api/estoque.spec.ts` | Aprovado |
-| CT-08 | Exigência de opt-in LGPD e permissão para compra anônima | `tests/e2e/app-fidelidade-lgpd.spec.ts` | Aprovado |
-| CT-09 | Bloqueio de cancelamento sem perfil gerencial (HTTP 403) | `tests/api/rbac.spec.ts` | Aprovado |
-
+| Cenário de Teste | Descrição da Validação | Tipo | Arquivo de Teste Automatizado | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| CT-01 | Pedido no Totem com pagamento Pix e emissão de senha | E2E / API | `tests/api/pagamento.spec.ts` e `tests/e2e/totem-checkout.spec.ts` | Aprovado |
+| CT-02 | Recusa de pagamento por saldo insuficiente (HTTP 402) | API | `tests/api/pagamento.spec.ts` | Aprovado |
+| CT-03 | Tolerância a timeout de 10s no gateway bancário (HTTP 504) | API | `tests/api/pagamento.spec.ts` | Aprovado |
+| CT-04 | Prevenção de concorrência atômica no último item de estoque | API | `tests/api/estoque.spec.ts` | Aprovado |
+| CT-05 | Ocultação preventiva de pratos pesados em cozinha reduzida | API | `tests/api/catalogo.spec.ts` | Aprovado |
+| CT-06 | Liberação automática de estoque por expiração de reserva (TTL) | API | `tests/api/estoque.spec.ts` | Aprovado |
+| CT-07 | Resiliência e reconexão offline do totem após queda de link | Manual / Resiliência | Documentado no QA Plan (`docs/plano-de-qualidade-e-testes.md`) | Planejado |
+| CT-08 | Exigência de opt-in LGPD e permissão para compra anônima | E2E | `tests/e2e/app-fidelidade-lgpd.spec.ts` | Aprovado |
+| CT-09 | Bloqueio de cancelamento sem perfil gerencial (HTTP 403) | API | `tests/api/rbac.spec.ts` | Aprovado |
+| CT-10 | Carga concorrente de 50 pedidos/minuto no almoço de pico | Carga / Performance | Documentado no QA Plan (`docs/plano-de-qualidade-e-testes.md`) | Planejado |
